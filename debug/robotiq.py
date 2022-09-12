@@ -87,6 +87,9 @@ def add_gripper_constraint(robot, scene):
 
     left_drive = scene.create_drive(lif, sapien.Pose(p_f), pad, sapien.Pose(p_p))
     left_drive.lock_motion(1, 1, 1, 0, 0, 0)
+    left_link = next(l for l in robot.get_links() if l.name == "left_outer_knuckle")
+    right_link = next(l for l in robot.get_links() if l.name == "right_outer_knuckle")
+    scene.create_gear(left_link, sapien.Pose(), right_link, sapien.Pose())
 
 
 args = parse_args()
@@ -106,7 +109,7 @@ viewer.set_camera_rpy(0, -1.57, 0)
 viewer.toggle_axes(0)
 
 # Articulation
-urdf_file = "../assets/robotiq_2f_85_gripper_visualization/robotiq_85_original.urdf"
+urdf_file = "../assets/robotiq_2f_140/model.urdf"
 loader = scene.create_urdf_loader()
 builder = loader.load_file_as_articulation_builder(urdf_file)
 
@@ -132,7 +135,7 @@ left_joint = next(
     j for j in robot.get_active_joints() if j.name == "left_outer_knuckle_joint"
 )
 left_joint.set_drive_property(1e5, 2000, 0.1)
-left_joint.set_drive_target(0.4)
+left_joint.set_drive_target(0.2)
 
 viewer.toggle_pause(True)
 while not viewer.closed:
