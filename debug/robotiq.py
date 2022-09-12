@@ -14,6 +14,7 @@ def parse_args():
         default=False,
         help="Whether to model the joint constraint for the gripper.",
     )
+    parser.add_argument("-m", "--model", type=str, required=True, help="choose gripper model: 85 or 140")
     return parser.parse_args()
 
 
@@ -109,7 +110,13 @@ viewer.set_camera_rpy(0, -1.57, 0)
 viewer.toggle_axes(0)
 
 # Articulation
-urdf_file = "../assets/robotiq_2f_140/model.urdf"
+if args.model == "85":
+    urdf_file = "../assets/robotiq_2f_85_gripper_visualization/robotiq_85_original.urdf"
+elif args.model == "140":
+    urdf_file = "../assets/robotiq_2f_140/model.urdf"
+else:
+    print("Unknown model: ", args.model)
+    exit()
 loader = scene.create_urdf_loader()
 builder = loader.load_file_as_articulation_builder(urdf_file)
 
